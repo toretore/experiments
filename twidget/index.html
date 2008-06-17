@@ -45,35 +45,61 @@
         #tabs .tab {
           background: #eee;
           display: none;
-          padding: 0.5em;
         }
 
           #tabs .tab.active {
             display: block;
           }
 
-          #tabs .tab h2 {
-            margin: 0 0 1em 0;
-            font-size: 120%;
-          }
+            #tabs .tab.active > h2 {
+              display: none;
+            }
 
       .twits {
-      
+        padding: 0.5em;
+        max-height: 15em;
+        overflow: auto;
       }
 
         .twits.loading {
           background: #f00 !important;
         }
+
+        .twits .twit {
+        
+        }
+
+          .twits .twit h3 {
+            
+          }
     </style>
   
     <div id="tabs">
-      <div class="tab twits refresh:5" id="public_twits">
+      <div class="tab">
         <h2 class="field title">Public</h2>
+        <div class="twits refresh:5 type:public">
+          <p>
+            <a href="http://twitter.com/public_timeline">Public timeline</a>
+          </p>
+        </div>
       </div>
-      <div class="tab twits refresh:5" id="private_twits">
+      <div class="tab">
         <h2 class="field title">Private</h2>
+        <div class="twits refresh:5 type:private">
+          <p>
+            <a href="http://twitter.com/home">Friends timeline</a>
+          </p>
+        </div>
       </div>
     </div>
+
+    <form action="http://twitter.com/statuses/update.xml" method="post" id="new_twitter_update" class="new_twitter_update">
+      <p>
+        <label for="twitter_update_status">Message</label>
+        <textarea name="status" id="twitter_update_status">What are you doing?</textarea>
+        <input type="submit" value="Update" />
+      </p>
+    </form>
 
   </body>
 </html>

@@ -3,11 +3,18 @@ if (!window.Mongo) { window.Mongo = {}; }
 Mongo.Tab = ActiveElement.Base.spawn('tab', {
 
   afterInitialize: function(){
-    this.twits = new Mongo.Twits(this.element);
+    var twits = this.element.down('.twits');
+    var type = twits.getLabel('type');
+    if (type == 'public') {
+      this.twits = new Mongo.PublicTwits(twits);
+    } else if (type == 'private') {
+      this.twits = new Mongo.PrivateTwits(twits);
+    }
   },
 
   activate: function(){
     this.collection.activateTab(this);
+    if (!this.twits.isActive()) { this.twits.activate(); }
   },
 
   isActive: function(){

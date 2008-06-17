@@ -20,9 +20,12 @@ if (!window.Mongo) { window.Mongo = {}; }
 
     timelineURL: 'http://twitter.com/statuses/public_timeline.json',
 
-    afterInitialize: function(){
-      this.loadStatuses();
-      this.setRefreshInterval();
+    activate: function(){
+      if (!this.get('active')) {
+        this.loadStatuses();
+        this.setRefreshInterval();
+        this.set('active', true);
+      }
     },
     
     setStatuses: function(json){
@@ -79,7 +82,31 @@ if (!window.Mongo) { window.Mongo = {}; }
     setLoadingValue: function(b){ this.element[(b ? 'add' : 'remove')+'ClassName']('loading'); },
 
     getRefreshValue: function(){ return this.element.getLabel('refresh'); },
-    setRefreshValue: function(v){ this.element.setLabel('refresh', v); this.setRefreshInterval(); }
+    setRefreshValue: function(v){ this.element.setLabel('refresh', v); this.setRefreshInterval(); },
+    
+    getActiveValue: function(){ return this.element.hasClassName('active'); },
+    setActiveValue: function(b){ this.element[(b ? 'add' : 'remove')+'ClassName']('active'); },
+    isActive: function(){ return this.get('active'); }
+
+  });
+
+
+  Mongo.PublicTwits = Mongo.Twits.spawn('twit', {
+    afterInitialize: function(){
+      this.activate();
+    }
+  });
+
+
+  Mongo.PrivateTwits = Mongo.Twits.spawn('twit', {
+
+    timelineURL: 'http://twitter.com/statuses/friends_timeline.json',
+
+    afterInitialize: function(){
+      ActiveElement.messages.subscribe('status update sent', function(){
+        this.loadStatuses();
+      }, this);
+    }
 
   });
 
@@ -88,13 +115,73 @@ if (!window.Mongo) { window.Mongo = {}; }
     extend: {
       //Builds a "twit" element from the JSON returned by Twitter
       buildFromJSON: function(st){
+        var time = new Date(st.created_at);
         return E('div', {'class':'twit',id:'twit_'+st.id},
-          E('h2', {'class':'field username'}, E('a', {href:'http://twitter.com/'+st.user.screen_name}, st.user.screen_name)),
+          E('h3', {'class':'field username'}, E('a', {href:'http://twitter.com/'+st.user.screen_name}, st.user.screen_name)),
+          E('p', {'class':'meta'},
+            'At ',
+            E('span', {'class':'field time'}, time.getHours()+':'+time.getMinutes()),
+            ' from ',
+            E('span', {'class':'field source'}, st.source)
+          ),
           E('p', {'class':'field message'}, st.text)
         );
       }
     }
 
+  });
+
+
+
+  Mongo.UpdateForm = ActiveElement.Form.spawn('twitter_update', {
+  
+    extend: {
+      findInDocument: function(){
+        return new this($('new_twitter_update'));
+      },
+      attach: function(form){
+        Mongo.updateForm = form;
+      }
+    },
+
+    afterInitialize: function(){
+      this.hijack();
+    },
+
+    hijack: function(){
+      this.element.observe('submit', function(e){
+        e.stop();
+        this.sendUpdate();
+      }.bindAsEventListener(this));
+    },
+    
+    //POST the update to Twitter in an iframe
+    sendUpdate: function(){
+      var name = 'humbaba'+(new Date()).valueOf();//unique name for the iframe
+      var iframe = E('iframe', {style:'display:none', name:name});
+      this.element.insert({bottom:iframe});
+
+      var previousTarget = this.element.readAttribute('target');
+      this.element.writeAttribute('target', name);//Redirect the form to the iframe
+
+      //Watch the iframe until it's loaded (request complete)
+      var interval = setInterval(function(){
+        var loaded = false;
+        try { iframe.contentWindow.src } catch (e) { loaded = true; } //X-domain raises exception
+        if (loaded) {
+          clearTimeout(interval);
+          iframe.remove();
+          this.element.writeAttribute('target', previousTarget);
+          ActiveElement.messages.fire('status update sent');
+        }
+      }.bind(this), 100);
+
+      this.element.submit();
+    },
+
+    getActionValue: function(){ return this.element.readAttribute('action'); },
+    setActionValue: function(v){ this.element.writeAttribute('action', v); }
+  
   });
 
 
