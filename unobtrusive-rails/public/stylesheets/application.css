@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: #eee;
+}
+
+body {
+  background: #fff;
+  border: 1px solid #ddd;
+  width: 50%;
+  margin: 1em auto;
+}
+
+#horses {
+
+}
+
+form {
+  margin: 1em;
+}
+
+  form.loading {
+    background: #ffe;
+  }
+
+p {
+  padding: 0.5em;
+}
+
+input {
+  border: 1px solid #666;
+  background: #f8f8f8;
+}
+
+p.button input, form.button-to input[type=submit] {
+  border: 1px outset #ccc;
+  background: #ccc;
+  color: #333;
+}
