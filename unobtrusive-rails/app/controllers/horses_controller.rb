@@ -3,6 +3,11 @@ class HorsesController < ApplicationController
 
   def index
     @horses = Horse.all
+
+    respond_to do |format|
+      format.html
+      format.js{ sleep 3; render :partial => "horse", :collection => @horses }
+    end
   end
 
 
@@ -12,7 +17,7 @@ class HorsesController < ApplicationController
     if @horse.save
       respond_to do |format|
         format.html{ redirect_to horses_url }
-        format.js{ render :json => @horse }
+        format.js{ render :partial => "horse", :object => @horse }
       end
     else
       respond_to do |format|
@@ -29,7 +34,7 @@ class HorsesController < ApplicationController
 
     respond_to do |format|
       format.html{ redirect_to horses_url }
-      format.js{ render :json => horse.save ? horse : horse.errors }
+      format.js{ sleep 2; render :json => horse }
     end
   end
 
@@ -40,7 +45,7 @@ class HorsesController < ApplicationController
 
     respond_to do |format|
       format.html{ redirect_to horses_url }
-      format.js{ render :json => horse.to_json }
+      format.js{ sleep 2; render :json => horse.to_json }
     end
   end
 

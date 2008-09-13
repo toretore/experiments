@@ -1,0 +1,21 @@
+<div class="horse" id="horse_<%= horse.id %>">
+  <% form_for horse, :html => {:class => "remote",
+    :onCreate => "$('horse_#{horse.id}').addClassName('loading')",
+    :onComplete => "$('horse_#{horse.id}').removeClassName('loading')"} do |f| -%>
+    <p>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </p>
+    <p>
+      <%= f.label :color %>
+      <%= f.text_field :color %>
+    </p>
+    <p class="button">
+      <%= submit_tag "Save" %>
+    </p>
+  <% end -%>
+  <%= button_to "Delete", horse, :method => :delete, :class => "confirm remote delete",
+    :onCreate => "$('horse_#{horse.id}').addClassName('deleting')",
+    :onSuccess => "$('horse_#{horse.id}').remove();",
+    :onFailure => "$('horse_#{horse.id}').removeClassName('deleting')"%>
+</div>

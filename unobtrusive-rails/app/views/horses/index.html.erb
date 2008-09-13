@@ -1,27 +1,16 @@
 <div id="horses">
-  <% for horse in @horses -%>
-    <% form_for "horse_#{horse.id}", horse do |f| -%>
-      <p>
-        <%= f.label :name %>
-        <%= f.text_field :name %>
-      </p>
-      <p>
-        <%= f.label :color %>
-        <%= f.text_field :color %>
-      </p>
-      <p class="button">
-        <%= submit_tag "Save" %>
-      </p>
-    <% end -%>
-    <%= button_to "Delete", horse, :method => :delete, :class => "confirm" %>
-  <% end -%>
+  <%= render :partial => "horse", :collection => @horses %>
 </div>
+
+<p>
+  <%= link_to "Reload", horses_path, :class => "remote", "update" => "horses", "onCreate" => "$('horses').addClassName('loading')", :onComplete => "$('horses').removeClassName('loading'); Rails.findAll($('horses'));" %>
+</p>
 
 <h2>New horse</h2>
 
-<% form_for Horse.new, :html => {:class => "remote confirm", "update-success-bottom" => "horses",
-  "update-failure-top" => "new_horse", "onComplete" => "alert('COMPLETE')", :onSuccess => "alert('SUCCESS')",
-  :onFailure => "alert('F-A-I-L')"} do |f| -%>
+<% form_for Horse.new, :html => {:class => "remote", "update-success-bottom" => "horses",
+  :onFailure => "alert('FAIL:\\n\\n'+request.responseText.evalJSON().map(function(a){ return a.first().capitalize()+' '+a.last(); }).join('\\n'))",
+  :onSuccess => "Rails.findAll($$('#horses .horse').last());"} do |f| -%>
     <p>
       <%= f.label :name %>
       <%= f.text_field :name %>

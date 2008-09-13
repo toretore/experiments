@@ -1,19 +1,45 @@
+//TODO: Enable disabled forms onunload
+//
 Rails = {
   confirmables: [],
   remoteForms: [],
-  findConfirmables: function(){
-    this.Confirmable.find().each(function(c){ this.confirmables.push(c); }, this);
+  remoteButtons: [],
+  remoteLinks: [],
+  findConfirmables: function(scope){
+    this.Confirmable.find(scope).each(function(c){ this.confirmables.push(c); }, this);
   },
-  findRemoteForms: function(){
-    this.RemoteForm.find().each(function(c){ this.remoteForms.push(c); }, this);
+  findRemoteForms: function(scope){
+    this.RemoteForm.find(scope).each(function(f){ this.remoteForms.push(f); }, this);
+  },
+  findRemoteButtons: function(scope){
+    this.RemoteButton.find(scope).each(function(b){ this.remoteButtons.push(b) }, this);
+  },
+  findRemoteLinks: function(scope){
+    this.RemoteLink.find(scope).each(function(l){ this.remoteLinks.push(l); }, this);
+  },
+  findAll: function(scope){
+    this.findConfirmables(scope);
+    this.findRemoteForms(scope);
+    this.findRemoteButtons(scope);
+    this.findRemoteLinks(scope);
+  },
+  findInScope: function(scope, what){
+    return scope ? scope.select(what) : $$(what);
   }
 };
 
-
-Rails.Confirmable = Class.create({
-
-  initialize: function(element){
+Rails.ElementWrapper = Class.create({
+  initialize: function(element, methods){
     this.element = element;
+    if (methods){ Object.extend(this, methods); }
+  }
+});
+
+
+Rails.Confirmable = Class.create(Rails.ElementWrapper, {
+
+  initialize: function($super, element, methods){
+    $super(element, methods);
     this.observe();
   },
  
@@ -64,94 +90,117 @@ Object.extend(Rails.Confirmable, {
 
 Rails.Confirmable.addMethods(Rails.Confirmable.Methods);
 
-Rails.Confirmable.find = function(){
-  return $$('.confirm:not(.remote)').map(function(el){
+Rails.Confirmable.find = function(s){
+  return Rails.findInScope(s, '.confirm:not(.remote)').map(function(el){
     return new Rails.Confirmable(el);
   });
 };
 
 
-Rails.Remote = Class.create({
+Rails.Remote = Class.create(Rails.ElementWrapper, {
 
-  updateAttributes: (function(){
-    var attributes = $w('update update-success update-failure');
-    var ac = attributes.clone();
-    $w('after before top bottom').each(function(mod){
-      ac.each(function(a){ attributes.push(a+'-'+mod); });
+  initialize: function($super, element, methods){
+    $super(element, methods);
+  },
+  
+  extractUpdateValues: function(status){
+    var positions = $w('before after top bottom'),
+        element = this.element,
+        values = {},
+        statuses = status ? [status] : ['success', 'failure'];
+
+    statuses.map(function(s){
+      return 'update-'+s;
+    }).concat('update').each(function(base){
+      positions.map(function(p){
+        return base + '-' + p;
+      }).concat(base).each(function(attr){
+        var value = element.readAttribute(attr);
+        if (value) {
+          values[attr] = value;
+        }
+      });
     });
-    return attributes;
-  })(),
 
-  initialize: function(element){
-    this.element = element;
-    this.options = {
-      update: { success: {}, failure: {} }
-    };
-    this.extractOptions();
+    return values;
   },
   
-  extractOptions: function(){
-    var val, expr = /update$|success$|failure$/;
-    this.updateAttributes.each(function(attr){
-      if (val = this.element.readAttribute(attr)) {
-        if (attr.match(expr)) { attr += '-all'; }
-        this.addOptionForUpdate.apply(this, attr.split('-').slice(1).concat(val));
-      }
-    }, this);
-    $w('Complete Failure Success').each(function(st){
-      if (val = this.element.readAttribute('on'+st)) {
-        this.options['on'+st] = val;
-      }
-    }, this);
-  },
-  
-  addOptionForUpdate: function(){
-    var args = $A(arguments);
-    var o = args.length == 3 ? this.options.update[args[0]] : this.options.update;
-    o[args.slice(-2)[0]] = args.slice(-1)[0];
+  extractCallbacks: function(){
+    var callbacks = {},
+        element = this.element;
+    $w('Create Complete Failure Success').each(function(st){
+      var val = element.readAttribute('on'+st);
+      if (val) { callbacks['on'+st] = val; }
+    });
+    return callbacks;
   },
   
   updateTargets: function(content, status){
-    [this.options.update, this.options.update[status]].each(function(u){
-      if (typeof u.all == 'string') { $(u.all).update(content); }
-      $w('after before top bottom').each(function(pos){
-        if (typeof u[pos] == 'string') {
-          var o = {}; o[pos] = content;
-          $(u[pos]).insert(o);
+    var values = this.extractUpdateValues(status);
+    Object.keys(values).each(function(key){
+      var el = $(values[key]);
+      if (el){
+        var pos = key.match(/before$|after$|top$|bottom$/);
+        if (pos) {
+          var o = {}; o[pos[0]] = content;
+          el.insert(o);
+        } else {
+          el.update(content);
         }
-      });
+      }
     });
   },
   
   optionsForRequest: function(){
-    var options = {
-      onLoading: function(request){
-        this.element.addClassName('loading');
-      },
-      onSuccess: function(request){
-        this.updateTargets(request.responseText, 'success');
-      },
-      onFailure: function(request){
-        this.updateTargets(request.responseText, 'failure');
-      },
-      onComplete: function(request){
-        this.element.removeClassName('loading');
-      }
-    };
+    var options = Rails.Remote.defaultOptions();
+    var callbacks = this.extractCallbacks();
+    
+    //Bind default callbacks and include any user-provided
+    //callbacks in the same function
+    Object.keys(options).grep(/^on/).each(function(key){
+      var defaultCallback = options[key],
+          providedCallback = callbacks[key];
+      options[key] = function(request){
+        defaultCallback.apply(this, arguments);
+        typeof providedCallback == 'function' ?
+          providedCallback.apply(this, arguments) :
+          eval(providedCallback);
+      }.bind(this);
+    }, this);
 
-    var remoteForm = this;
-    Object.keys(this.options).each(function(key){
-      if (key.match(/^on/)){
-        var val = remoteForm.options[key];
-        var fn = options[key] || Prototype.K;
+    //Bind user-provided callbacks not already included
+    //in a default callback function
+    Object.keys(callbacks).each(function(key){
+      if (!options[key]) {
+        var callback = callbacks[key];
         options[key] = function(request){
-          fn.apply(remoteForm, arguments);
-          typeof val == 'string' ? eval(val) : val();
-        };
+          typeof callback == 'function' ? callback.apply(this, arguments) : eval(callback);
+        }.bind(this);
       }
-    });
+    }, this);
 
     return options;
+  }
+
+});
+
+Object.extend(Rails.Remote, {
+
+  defaultOptions: function(){
+    return {
+      onCreate: function(req){
+        this.element.addClassName('loading');
+      },
+      onSuccess: function(req){
+        this.updateTargets(req.responseText, 'success');
+      },
+      onFailure: function(req){
+        this.updateTargets(req.responseText, 'failure');
+      },
+      onComplete: function(req){
+        this.element.removeClassName('loading');
+      }
+    }
   }
 
 });
@@ -161,8 +210,8 @@ Rails.Remote.addMethods(Rails.Confirmable.Methods);
 
 Rails.RemoteForm = Class.create(Rails.Remote, {
 
-  initialize: function($super, element){
-    $super(element);
+  initialize: function($super, element, methods){
+    $super(element, methods);
     this.hijack();
   },
 
@@ -177,15 +226,74 @@ Rails.RemoteForm = Class.create(Rails.Remote, {
 
 });
 
-Rails.RemoteForm.find = function(){
-  return $$('form.remote').map(function(form){
+Rails.RemoteForm.find = function(s){
+  return Rails.findInScope(s, 'form.remote').map(function(form){
     return new Rails.RemoteForm(form);
   });
 };
 
 
+//GIANT HACK IN THE NAME OF HEAVENLY LORD DRY, THE UNCREATED CREATOR OF RE-USE AND OMNIPRESENT WATCHER AND PUNISHER OF THE SIN OF REPETITION
+Rails.RemoteButton = Class.create(Rails.RemoteForm, {
+
+  extractUpdateValues: function(){
+    var context = {element:this.element.down('input.remote')};
+    return this.constructor.superclass.prototype.extractUpdateValues.apply(context, arguments);
+  },
+
+  extractCallbacks: function(){
+    var context = {element:this.element.down('input.remote')};
+    return this.constructor.superclass.prototype.extractCallbacks.apply(context, arguments);
+  },
+
+  isConfirmable: function(){
+    var context = {element:this.element.down('input.remote')};
+    return this.constructor.superclass.prototype.isConfirmable.apply(context, arguments);
+  }
+
+});
+
+Rails.RemoteButton.find = function(s){
+  return Rails.findInScope(s, 'form.button-to input.remote').map(function(button){
+    return new Rails.RemoteButton(button.up('form'));
+  });
+};
+
+
+Rails.RemoteLink = Class.create(Rails.Remote, {
+
+  initialize: function($super, element, methods){
+    $super(element, methods);
+    this.hijack();
+  },
+  
+  optionsForRequest: function($super){
+    var options = $super();
+    if (!options.method) {
+      options.method = this.element.readAttribute('method') || 'get';
+    }
+    return options;
+  },
+
+  hijack: function(){
+    this.element.observe('click', function(e){
+      e.stop();
+      if (this.confirm()){
+        new Ajax.Request(this.element.readAttribute('href'), this.optionsForRequest());
+      }
+    }.bindAsEventListener(this));
+  }
+
+});
+
+Rails.RemoteLink.find = function(s){
+  return Rails.findInScope(s, 'a.remote').map(function(el){
+    return new this(el);
+  }, this);
+};
+
+
 
 document.observe('dom:loaded', function(){
-  Rails.findConfirmables();
-  Rails.findRemoteForms();
+  Rails.findAll(false);
 });

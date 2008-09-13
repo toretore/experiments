@@ -8,26 +8,78 @@ html {
 }
 
 body {
-  background: #fff;
-  border: 1px solid #ddd;
   width: 50%;
   margin: 1em auto;
 }
 
 #horses {
-
+  border: 1px solid transparent;
 }
 
-form {
-  margin: 1em;
-}
-
-  form.loading {
-    background: #ffe;
+  #horses.loading {
+    border-color: #ff0;
   }
+
+  #horses .horse {
+    margin: 1em;
+    border: 1px solid #999;
+    background: #fff;
+    position: relative;
+  }
+
+    #horses .horse.loading {
+      border-color: #ff0;
+    }
+
+    #horses .horse.deleting {
+      border-color: #f00;
+    }
+
+    #horses .horse input.delete {
+      position: absolute;
+      top: 0.25em;
+      right: 0.25em;
+      min-width: 5em;
+      padding: 0.1em 0;
+    }
+
+    #horses .horse p {
+      overflow: hidden;
+      width: 70%;
+    }
+
+      #horses .horse p label {
+        width: 25%;
+        float: left;
+        padding: 0.2em;
+        text-align: right;
+      }
+
+      #horses .horse p input {
+        padding: 0.2em;
+        width: 70%;
+        float: right;
+      }
+
+    #horses .horse p.button {
+      position: absolute;
+      bottom: 0.25em;
+      right: 0.25em;
+      padding: 0;
+      width: auto;
+    }
+
+      #horses .horse p.button input {
+        padding: 0.1em 0;
+        min-width: 5em;
+      }
 
 p {
   padding: 0.5em;
+}
+
+a.loading {
+  background: #f00;
 }
 
 input {
