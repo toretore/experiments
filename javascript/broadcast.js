@@ -1,7 +1,9 @@
 /*
  * Broadcaster © 2008 Tore Darell
  *
- * Implements a centralised broadcast/listen pattern.
+ * Implements a centralised broadcast/listen pattern. A broadcaster
+ * is simple and dumb and only knows how to broadcast a message to
+ * listeners for that particular message.
  *
  * var b = new Broadcaster();
  *
