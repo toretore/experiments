@@ -1,3 +1,5 @@
+// Finite state machine - WIP!
+
 var StateMachine = function(initial){
   this.current = this.initial = initial;
   this.scope = this;
@@ -6,7 +8,22 @@ var StateMachine = function(initial){
 (function(p){
 
   p.states = {};
-  p.events = [];
+  p.events = {};
+
+  p.addState = function(name, callbacks){
+    var s = {};
+    for (var p in callbacks) {
+      if (p.match(/^on/) && callbacks.hasOwnProperty(p)) {
+        s[p] = callbacks[p];
+      }
+    }
+    this.states[name] = s;
+  };
+
+  p.addEvent = function(name, from, to){
+    this.events[name] = [from,to];
+    this[name] = function(){ this.event(name); };
+  };
 
   p.changeState = function(stateName){
     var next = this.states[stateName];
@@ -18,6 +35,12 @@ var StateMachine = function(initial){
     current.onExited && current.onExited.call(this.scope, next);
     next.onEntered && next.onEntered.call(this.scope, current);
     return this.current;
+  };
+
+  p.event = function(name){
+    var e = this.events[name];
+    if (!e || this.current != e[0]) return false;
+    this.changeState(e[1]);
   };
 
 })(StateMachine.prototype);
