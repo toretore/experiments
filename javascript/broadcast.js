@@ -18,6 +18,28 @@
  * b.listen('new item', function(i){ this.push(i); }, collector);
  * b.broadcast('new item', 'cat'); // ['cat']
  * b.broadcast('new item', 'dog'); // ['cat', 'dog']
+ *
+ * A broadcaster can easily be used to make an object observable:
+ *
+ * function ElementObserver(element, interval){
+ *   this.element = element;
+ *   this.broadcaster = new Broadcaster(); //The magic line
+ *   var that = this, oldValue = element.innerHTML;
+ *   this._interval = setInterval(function(){
+ *     var newValue = element.innerHTML;
+ *     if (newValue !== oldValue) {
+ *       that.broadcaster.broadcast('value changed', newValue, oldValue);
+ *     }
+ *     oldValue = newValue;
+ *   }, interval || 500);
+ * };
+ *
+ * var observers = ['some_id', 'some_other_id'].map(function(id){ return new ElementObserver($(id)); });
+ * observers.each(function(o){
+ *   o.broadcaster.listen('value changed', function(ov, nv){
+ *     alert('Value in '+o.element+' changed from '+ov+' to '+nv);
+ *   });
+ * });
  * 
  */
 
