@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: #fff;
+}
+
+body {
+  
+}
+
+.carousel.active {
+  overflow: hidden;
+  list-style-type: none;
+  padding: 1em;
+}
+
+.carousel.active li {
+  float: left;
+  padding: 2em 0;
+  width: 7em;
+  text-align: center;
+  margin: 0.25em;
+}
+
+.carousel.active .image {
+  display: none;
+  background: #f00;
+}
+
+  .carousel.active .image.active {
+    display: block;
+  }
+
+.carousel.active .next, .carousel.active .prev {
+  background: #0f0;
+  cursor: pointer;
+}
+
+  .carousel.active .next:hover, .carousel.active .prev:hover {
+    text-decoration: underline;
+  }
+  
+  .carousel.active .next:active, .carousel.active .prev:active {
+    background: #090;
+  }
