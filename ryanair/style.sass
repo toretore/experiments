@@ -1,0 +1,194 @@
+*
+  margin: 0
+  padding: 0
+
+html
+  background: #fff
+
+body
+  font-family: Verdana, Arial, sans-serif
+
+h1
+  background: #009
+  font-size: 160%
+  font-style: italic
+
+  a
+    display: block
+    padding: 0.25em
+    padding-top: 1em
+    color: #fff
+    text-decoration: none
+    border-bottom: 1px solid #003
+
+    .com
+      color: #cc0
+      font-weight: normal
+      font-size: 80%
+
+    &:hover
+      text-decoration: underline
+
+#booking
+  overflow: hidden
+
+#map
+  width: 35%
+  padding: 2em 0
+  text-align: center
+  float: left
+
+  #image
+    position: relative
+
+    .city
+      position: absolute
+      text-decoration: none
+      outline: none
+
+      .bullet
+        color: #000
+
+      .name
+        display: none
+        background: #eee
+        border: 1px solid #ddd
+        color: #000
+        font-size: 70%
+        margin-left: 0.5em
+        padding: 0.2em
+
+      &:hover, &.selected
+        
+        .name
+          display: inline
+      
+      &.stn
+        left: 133px
+        top: 214px
+      
+      &.nce
+        left: 168px
+        top: 299px
+      
+      &.fra
+        left: 177px
+        top: 235px
+      
+      &.alc
+        left: 109px
+        top: 344px
+      
+      &.rom
+        left: 216px
+        top: 315px
+      
+      &.bud
+        left: 260px
+        top: 257px
+      
+      &.sth
+        left: 230px
+        top: 145px
+      
+      &.war
+        left: 262px
+        top: 209px
+      
+      &.sof
+        left: 297px
+        top: 299px
+      
+      &.dub
+        left: 248px
+        top: 300px
+      
+      &.kiv
+        left: 323px
+        top: 212px
+      
+      &.ath
+        left: 301px
+        top: 343px
+      
+      &.rig
+        left: 271px
+        top: 159px
+
+#dates
+  float: left
+  width: 30%
+
+  #departure_date, #return_date
+    margin: 1em
+
+    h2
+      font-size: 100%
+
+table.calendar
+  width: 100%
+  background: #eee
+  border: 1px outset #ddd
+  text-align: center
+  border-spacing: 0
+  font-size: 80%
+
+  thead
+    background: #ddd
+
+    th
+      padding: 0.25em
+      border-bottom: 1px solid #ccc
+
+    tr.month_year th
+      border-bottom: none
+
+      a
+        color: #000
+        text-decoration: none
+        padding: 0 0.5em 0.25em 0.5em
+        border: 1px solid #ddd
+        outline: none
+
+        &:hover, &:focus
+          border-style: outset
+
+        &:active
+          border-style: inset
+
+  .day
+
+    &.enhanced
+      padding: 0.2em
+
+      label
+        cursor: pointer
+        border: 1px solid transparent
+        display: block
+        cursor: pointer
+        padding: 0.25em
+        min-width: 2.5em
+
+        &:hover, &:focus
+          background: #ccc
+          border-color: #ccc
+
+        &:hover
+          border-style: outset
+
+        &:active
+          border-style: inset
+
+        input
+          display: none
+    
+    &.disabled
+      color: #999
+
+      label:hover, label:focus
+        background: transparent
+
+    &.active label, &.active label:hover
+      background: #ccc
+      border-color: #ccc
+      border-style: inset

@@ -1,0 +1,151 @@
+* {
+  margin: 0;
+  padding: 0; }
+
+html {
+  background: #fff; }
+
+body {
+  font-family: Verdana, Arial, sans-serif; }
+
+h1 {
+  background: #009;
+  font-size: 160%;
+  font-style: italic; }
+  h1 a {
+    display: block;
+    padding: 0.25em;
+    padding-top: 1em;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid #003; }
+    h1 a .com {
+      color: #cc0;
+      font-weight: normal;
+      font-size: 80%; }
+    h1 a:hover {
+      text-decoration: underline; }
+
+#booking {
+  overflow: hidden; }
+
+#map {
+  width: 35%;
+  padding: 2em 0;
+  text-align: center;
+  float: left; }
+  #map #image {
+    position: relative; }
+    #map #image .city {
+      position: absolute;
+      text-decoration: none; }
+      #map #image .city .bullet {
+        color: #000; }
+      #map #image .city .name {
+        display: none;
+        background: #eee;
+        border: 1px solid #ddd;
+        color: #000;
+        font-size: 70%;
+        margin-left: 0.5em;
+        padding: 0.2em; }
+      #map #image .city:hover .name,       #map #image .city.selected .name {
+        display: inline; }
+      #map #image .city.stn {
+        left: 133px;
+        top: 214px; }
+      #map #image .city.nce {
+        left: 168px;
+        top: 299px; }
+      #map #image .city.fra {
+        left: 177px;
+        top: 235px; }
+      #map #image .city.alc {
+        left: 109px;
+        top: 344px; }
+      #map #image .city.rom {
+        left: 216px;
+        top: 315px; }
+      #map #image .city.bud {
+        left: 260px;
+        top: 257px; }
+      #map #image .city.sth {
+        left: 230px;
+        top: 145px; }
+      #map #image .city.war {
+        left: 262px;
+        top: 209px; }
+      #map #image .city.sof {
+        left: 297px;
+        top: 299px; }
+      #map #image .city.dub {
+        left: 248px;
+        top: 300px; }
+      #map #image .city.kiv {
+        left: 323px;
+        top: 212px; }
+      #map #image .city.ath {
+        left: 301px;
+        top: 343px; }
+      #map #image .city.rig {
+        left: 271px;
+        top: 159px; }
+
+#dates {
+  float: left;
+  width: 30%; }
+  #dates #departure_date, #dates #return_date {
+    margin: 1em; }
+    #dates #departure_date h2,     #dates #return_date h2 {
+      font-size: 100%; }
+
+table.calendar {
+  width: 100%;
+  background: #eee;
+  border: 1px outset #ddd;
+  text-align: center;
+  border-spacing: 0;
+  font-size: 80%; }
+  table.calendar thead {
+    background: #ddd; }
+    table.calendar thead th {
+      padding: 0.25em;
+      border-bottom: 1px solid #ccc; }
+    table.calendar thead tr.month_year th {
+      border-bottom: none; }
+      table.calendar thead tr.month_year th a {
+        color: #000;
+        text-decoration: none;
+        padding: 0 0.5em 0.25em 0.5em;
+        border: 1px solid #ddd;
+        outline: none; }
+        table.calendar thead tr.month_year th a:hover, table.calendar thead tr.month_year th a:focus {
+          border-style: outset; }
+        table.calendar thead tr.month_year th a:active {
+          border-style: inset; }
+  table.calendar .day.enhanced {
+    padding: 0.2em; }
+    table.calendar .day.enhanced label {
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: block;
+      cursor: pointer;
+      padding: 0.25em;
+      min-width: 2.5em; }
+      table.calendar .day.enhanced label:hover, table.calendar .day.enhanced label:focus {
+        background: #ccc;
+        border-color: #ccc; }
+      table.calendar .day.enhanced label:hover {
+        border-style: outset; }
+      table.calendar .day.enhanced label:active {
+        border-style: inset; }
+      table.calendar .day.enhanced label input {
+        display: none; }
+  table.calendar .day.disabled {
+    color: #999; }
+    table.calendar .day.disabled label:hover, table.calendar .day.disabled label:focus {
+      background: transparent; }
+  table.calendar .day.active label, table.calendar .day.active label:hover {
+    background: #ccc;
+    border-color: #ccc;
+    border-style: inset; }

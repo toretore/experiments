@@ -1,0 +1,406 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Ryanair</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <link rel="stylesheet" media="screen" type="text/css" href="style.css" />
+    <script type="text/javascript" src="prototype.js"></script>
+    <script type="text/javascript" src="broadcast.js"></script>
+    <script type="text/javascript" src="class.js"></script>
+    <script type="text/javascript" src="active_element.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+  </head>
+  <body>
+
+    <h1><a href="http://ryanair.com/">Ryanair<span class="com">.com</span></a></h1>
+
+    <form id="booking">
+
+      <div id="map">
+        <p>
+          <label for="from">From</label>
+          <select id="from" name="from">
+            <option value="">Select a city..</option>
+            <option class="city" value="stn">London</option>
+            <option class="city" value="nce">Nice</option>
+            <option class="city" value="fra">Frankfurt</option>
+            <option class="city" value="alc">Alicante</option>
+            <option class="city" value="rom">Rome</option>
+            <option class="city" value="bud">Budapest</option>
+            <option class="city" value="sth">Stockholm</option>
+            <option class="city" value="war">Warsaw</option>
+            <option class="city" value="sof">Sofia</option>
+            <option class="city" value="dub">Dubrovnik</option>
+            <option class="city" value="kiv">Kiev</option>
+            <option class="city" value="ath">Athens</option>
+            <option class="city" value="rig">Riga</option>
+          </select>
+          <label for="destination">To</label>
+          <select id="destination" name="destination">
+            <option value="">Select a city..</option>
+            <option class="city" value="stn">London</option>
+            <option class="city" value="stn">London</option>
+            <option class="city" value="nce">Nice</option>
+            <option class="city" value="fra">Frankfurt</option>
+            <option class="city" value="alc">Alicante</option>
+            <option class="city" value="rom">Rome</option>
+            <option class="city" value="bud">Budapest</option>
+            <option class="city" value="sth">Stockholm</option>
+            <option class="city" value="war">Warsaw</option>
+            <option class="city" value="sof">Sofia</option>
+            <option class="city" value="dub">Dubrovnik</option>
+            <option class="city" value="kiv">Kiev</option>
+            <option class="city" value="ath">Athens</option>
+            <option class="city" value="rig">Riga</option>
+          </select>
+        </p>
+        <p id="image">
+          <img src="map.png" width="400" height="400" />
+        </p>
+      </div>
+
+      <div id="dates">
+        <div id="departure_date">
+
+          <h2>Departure</h2>
+
+          <table class="calendar type:departure">
+            <thead>
+              <tr class="month_year">
+                <th colspan="4" class="month">
+                  <a href="#">◂</a>
+                  November
+                  <a href="#">▸</a>
+                </th>
+                <th colspan="3" class="year">
+                  <a href="#">◂</a>
+                  2008
+                  <a href="#">▸</a>
+                </th>
+              </tr>
+              <tr>
+                <th class="day mon">Mon</th>
+                <th class="day tue">Tue</th>
+                <th class="day wed">Wed</th>
+                <th class="day thu">Thu</th>
+                <th class="day fri">Fri</th>
+                <th class="day sat">Sat</th>
+                <th class="day sun">Sun</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="week">
+                <td class="day mon"><label for="departure_day_1">
+                  <input type="radio" id="departure_day_1" name="departure_date" value="2008-09-01" />
+                  1</label>
+                </td>
+                <td class="day tue"><label for="departure_day_2">
+                  <input type="radio" id="departure_day_2" name="departure_date" value="2008-09-02" />
+                  2</label>
+                </td>
+                <td class="day wed"><label for="departure_day_3">
+                  <input type="radio" id="departure_day_3" name="departure_date" value="2008-09-03" />
+                  3</label>
+                </td>
+                <td class="day thu"><label for="departure_day_4">
+                  <input type="radio" id="departure_day_4" name="departure_date" value="2008-09-04" />
+                  4</label>
+                </td>
+                <td class="day fri"><label for="departure_day_5">
+                  <input type="radio" id="departure_day_5" name="departure_date" value="2008-09-05" />
+                  5</label>
+                </td>
+                <td class="day sat"><label for="departure_day_6">
+                  <input type="radio" id="departure_day_6" name="departure_date" value="2008-09-06" />
+                  6</label>
+                </td>
+                <td class="day sun"><label for="departure_day_7">
+                  <input type="radio" id="departure_day_7" name="departure_date" value="2008-09-07" />
+                  7</label>
+                </td>
+              </tr>
+              <tr class="week">
+                <td class="day mon"><label for="departure_day_8">
+                  <input type="radio" id="departure_day_8" name="departure_date" value="2008-09-08" />
+                  8</label>
+                </td>
+                <td class="day tue"><label for="departure_day_9">
+                  <input type="radio" id="departure_day_9" name="departure_date" value="2008-09-09" />
+                  9</label>
+                </td>
+                <td class="day wed"><label for="departure_day_10">
+                  <input type="radio" id="departure_day_10" name="departure_date" value="2008-09-10" />
+                  10</label>
+                </td>
+                <td class="day thu"><label for="departure_day_11">
+                  <input type="radio" id="departure_day_11" name="departure_date" value="2008-09-11" />
+                  11</label>
+                </td>
+                <td class="day fri"><label for="departure_day_12">
+                  <input type="radio" id="departure_day_12" name="departure_date" value="2008-09-12" />
+                  12</label>
+                </td>
+                <td class="day sat"><label for="departure_day_13">
+                  <input type="radio" id="departure_day_13" name="departure_date" value="2008-09-13" />
+                  13</label>
+                </td>
+                <td class="day sun"><label for="departure_day_14">
+                  <input type="radio" id="departure_day_14" name="departure_date" value="2008-09-14" />
+                  14</label>
+                </td>
+              </tr>
+              <tr class="week">
+                <td class="day mon"><label for="departure_day_15">
+                  <input type="radio" id="departure_day_15" name="departure_date" value="2008-09-15" />
+                  15</label>
+                </td>
+                <td class="day tue"><label for="departure_day_16">
+                  <input type="radio" id="departure_day_16" name="departure_date" value="2008-09-16" />
+                  16</label>
+                </td>
+                <td class="day wed"><label for="departure_day_17">
+                  <input type="radio" id="departure_day_17" name="departure_date" value="2008-09-17" />
+                  17</label>
+                </td>
+                <td class="day thu"><label for="departure_day_18">
+                  <input type="radio" id="departure_day_18" name="departure_date" value="2008-09-18" />
+                  18</label>
+                </td>
+                <td class="day fri"><label for="departure_day_19">
+                  <input type="radio" id="departure_day_19" name="departure_date" value="2008-09-19" />
+                  19</label>
+                </td>
+                <td class="day sat"><label for="departure_day_20">
+                  <input type="radio" id="departure_day_20" name="departure_date" value="2008-09-20" />
+                  20</label>
+                </td>
+                <td class="day sun"><label for="departure_day_21">
+                  <input type="radio" id="departure_day_21" name="departure_date" value="2008-09-21" />
+                  21</label>
+                </td>
+              </tr>
+              <tr class="week">
+                <td class="day mon"><label for="departure_day_22">
+                  <input type="radio" id="departure_day_22" name="departure_date" value="2008-09-22" />
+                  22</label>
+                </td>
+                <td class="day tue"><label for="departure_day_23">
+                  <input type="radio" id="departure_day_23" name="departure_date" value="2008-09-23" />
+                  23</label>
+                </td>
+                <td class="day wed"><label for="departure_day_24">
+                  <input type="radio" id="departure_day_24" name="departure_date" value="2008-09-24" />
+                  24</label>
+                </td>
+                <td class="day thu"><label for="departure_day_25">
+                  <input type="radio" id="departure_day_25" name="departure_date" value="2008-09-25" />
+                  25</label>
+                </td>
+                <td class="day fri"><label for="departure_day_26">
+                  <input type="radio" id="departure_day_26" name="departure_date" value="2008-09-26" />
+                  26</label>
+                </td>
+                <td class="day sat"><label for="departure_day_27">
+                  <input type="radio" id="departure_day_27" name="departure_date" value="2008-09-27" />
+                  27</label>
+                </td>
+                <td class="day sun"><label for="departure_day_28">
+                  <input type="radio" id="departure_day_28" name="departure_date" value="2008-09-28" />
+                  28</label>
+                </td>
+              </tr>
+              <tr class="week">
+                <td class="day mon"><label for="departure_day_29">
+                  <input type="radio" id="departure_day_29" name="departure_date" value="2008-09-29" />
+                  29</label>
+                </td>
+                <td class="day tue"><label for="departure_day_30">
+                  <input type="radio" id="departure_day_30" name="departure_date" value="2008-09-30" />
+                  30</label>
+                </td>
+                <td class="day wed disabled">1</td>
+                <td class="day thu disabled">2</td>
+                <td class="day fri disabled">3</td>
+                <td class="day sat disabled">4</td>
+                <td class="day sun disabled">5</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <div id="return_date">
+
+          <h2>Return</h2>
+
+          <table class="calendar type:return">
+            <thead>
+              <tr class="month_year">
+                <th colspan="4" class="month">
+                  <a href="#">◂</a>
+                  November
+                  <a href="#">▸</a>
+                </th>
+                <th colspan="3" class="year">
+                  <a href="#">◂</a>
+                  2008
+                  <a href="#">▸</a>
+                </th>
+              </tr>
+              <tr>
+                <th class="day mon">Mon</th>
+                <th class="day tue">Tue</th>
+                <th class="day wed">Wed</th>
+                <th class="day thu">Thu</th>
+                <th class="day fri">Fri</th>
+                <th class="day sat">Sat</th>
+                <th class="day sun">Sun</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="week">
+                <td class="day mon"><label for="return_day_1">
+                  <input type="radio" id="return_day_1" name="return_date" value="2008-09-01" />
+                  1</label>
+                </td>
+                <td class="day tue"><label for="return_day_2">
+                  <input type="radio" id="return_day_2" name="return_date" value="2008-09-02" />
+                  2</label>
+                </td>
+                <td class="day wed"><label for="return_day_3">
+                  <input type="radio" id="return_day_3" name="return_date" value="2008-09-03" />
+                  3</label>
+                </td>
+                <td class="day thu"><label for="return_day_4">
+                  <input type="radio" id="return_day_4" name="return_date" value="2008-09-04" />
+                  4</label>
+                </td>
+                <td class="day fri"><label for="return_day_5">
+                  <input type="radio" id="return_day_5" name="return_date" value="2008-09-05" />
+                  5</label>
+                </td>
+                <td class="day sat"><label for="return_day_6">
+                  <input type="radio" id="return_day_6" name="return_date" value="2008-09-06" />
+                  6</label>
+                </td>
+                <td class="day sun"><label for="return_day_7">
+                  <input type="radio" id="return_day_7" name="return_date" value="2008-09-07" />
+                  7</label>
+                </td>
+              </tr>
+              <tr class="week">
+                <td class="day mon"><label for="return_day_8">
+                  <input type="radio" id="return_day_8" name="return_date" value="2008-09-08" />
+                  8</label>
+                </td>
+                <td class="day tue"><label for="return_day_9">
+                  <input type="radio" id="return_day_9" name="return_date" value="2008-09-09" />
+                  9</label>
+                </td>
+                <td class="day wed"><label for="return_day_10">
+                  <input type="radio" id="return_day_10" name="return_date" value="2008-09-10" />
+                  10</label>
+                </td>
+                <td class="day thu"><label for="return_day_11">
+                  <input type="radio" id="return_day_11" name="return_date" value="2008-09-11" />
+                  11</label>
+                </td>
+                <td class="day fri"><label for="return_day_12">
+                  <input type="radio" id="return_day_12" name="return_date" value="2008-09-12" />
+                  12</label>
+                </td>
+                <td class="day sat"><label for="return_day_13">
+                  <input type="radio" id="return_day_13" name="return_date" value="2008-09-13" />
+                  13</label>
+                </td>
+                <td class="day sun"><label for="return_day_14">
+                  <input type="radio" id="return_day_14" name="return_date" value="2008-09-14" />
+                  14</label>
+                </td>
+              </tr>
+              <tr class="week">
+                <td class="day mon"><label for="return_day_15">
+                  <input type="radio" id="return_day_15" name="return_date" value="2008-09-15" />
+                  15</label>
+                </td>
+                <td class="day tue"><label for="return_day_16">
+                  <input type="radio" id="return_day_16" name="return_date" value="2008-09-16" />
+                  16</label>
+                </td>
+                <td class="day wed"><label for="return_day_17">
+                  <input type="radio" id="return_day_17" name="return_date" value="2008-09-17" />
+                  17</label>
+                </td>
+                <td class="day thu"><label for="return_day_18">
+                  <input type="radio" id="return_day_18" name="return_date" value="2008-09-18" />
+                  18</label>
+                </td>
+                <td class="day fri"><label for="return_day_19">
+                  <input type="radio" id="return_day_19" name="return_date" value="2008-09-19" />
+                  19</label>
+                </td>
+                <td class="day sat"><label for="return_day_20">
+                  <input type="radio" id="return_day_20" name="return_date" value="2008-09-20" />
+                  20</label>
+                </td>
+                <td class="day sun"><label for="return_day_21">
+                  <input type="radio" id="return_day_21" name="return_date" value="2008-09-21" />
+                  21</label>
+                </td>
+              </tr>
+              <tr class="week">
+                <td class="day mon"><label for="return_day_22">
+                  <input type="radio" id="return_day_22" name="return_date" value="2008-09-22" />
+                  22</label>
+                </td>
+                <td class="day tue"><label for="return_day_23">
+                  <input type="radio" id="return_day_23" name="return_date" value="2008-09-23" />
+                  23</label>
+                </td>
+                <td class="day wed"><label for="return_day_24">
+                  <input type="radio" id="return_day_24" name="return_date" value="2008-09-24" />
+                  24</label>
+                </td>
+                <td class="day thu"><label for="return_day_25">
+                  <input type="radio" id="return_day_25" name="return_date" value="2008-09-25" />
+                  25</label>
+                </td>
+                <td class="day fri"><label for="return_day_26">
+                  <input type="radio" id="return_day_26" name="return_date" value="2008-09-26" />
+                  26</label>
+                </td>
+                <td class="day sat"><label for="return_day_27">
+                  <input type="radio" id="return_day_27" name="return_date" value="2008-09-27" />
+                  27</label>
+                </td>
+                <td class="day sun"><label for="return_day_28">
+                  <input type="radio" id="return_day_28" name="return_date" value="2008-09-28" />
+                  28</label>
+                </td>
+              </tr>
+              <tr class="week">
+                <td class="day mon"><label for="return_day_29">
+                  <input type="radio" id="return_day_29" name="return_date" value="2008-09-29" />
+                  29</label>
+                </td>
+                <td class="day tue"><label for="return_day_30">
+                  <input type="radio" id="return_day_30" name="return_date" value="2008-09-30" />
+                  30</label>
+                </td>
+                <td class="day wed disabled">1</td>
+                <td class="day thu disabled">2</td>
+                <td class="day fri disabled">3</td>
+                <td class="day sat disabled">4</td>
+                <td class="day sun disabled">5</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </body>
+</html>
