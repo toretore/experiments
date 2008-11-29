@@ -1,0 +1,46 @@
+8
+
+dir
+50
+http://nimrod.interinter.net/misc/javascript/jormungandr
+http://nimrod.interinter.net/misc
+
+
+
+2007-10-22T22:25:33.790391Z
+50
+horetore
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2cad5c3c-b82c-0410-8434-f7c6e6ff1728
+
+test
+dir
+
+jormungandr.js
+file
+51
+
+
+
+2007-10-30T18:41:25.000000Z
+c006d1da9f6b3711f955eb068fa96168
+2007-10-30T19:44:56.669051Z
+51
+horetore
+
+yui
+dir
+

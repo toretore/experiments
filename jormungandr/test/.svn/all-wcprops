@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/misc/!svn/ver/51/javascript/jormungandr/test
+END
+JSSpec.js
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/misc/!svn/ver/51/javascript/jormungandr/test/JSSpec.js
+END
+mongo.html
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/misc/!svn/ver/51/javascript/jormungandr/test/mongo.html
+END
+test.html
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/misc/!svn/ver/51/javascript/jormungandr/test/test.html
+END
+general_specs.js
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/misc/!svn/ver/51/javascript/jormungandr/test/general_specs.js
+END
+dom_specs.js
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/misc/!svn/ver/51/javascript/jormungandr/test/dom_specs.js
+END
+dom_tests.js
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/misc/!svn/ver/51/javascript/jormungandr/test/dom_tests.js
+END
+JSSpec.css
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/misc/!svn/ver/51/javascript/jormungandr/test/JSSpec.css
+END
+builder_specs.js
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/misc/!svn/ver/51/javascript/jormungandr/test/builder_specs.js
+END
+diff_match_patch.js
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/misc/!svn/ver/51/javascript/jormungandr/test/diff_match_patch.js
+END
