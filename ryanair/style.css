@@ -23,6 +23,11 @@ h1 {
       color: #cc0;
       font-weight: normal;
       font-size: 80%; }
+    h1 a .nocruft {
+      font-weight: normal;
+      font-size: 50%;
+      margin-left: 2em;
+      color: #ccf; }
     h1 a:hover {
       text-decoration: underline; }
 
@@ -38,7 +43,8 @@ h1 {
     position: relative; }
     #map #image .city {
       position: absolute;
-      text-decoration: none; }
+      text-decoration: none;
+      outline: none; }
       #map #image .city .bullet {
         color: #000; }
       #map #image .city .name {
