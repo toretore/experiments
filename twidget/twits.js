@@ -1,4 +1,4 @@
-if (!window.Mongo) { window.Mongo = {}; }
+if (!window.Blahger) { window.Blahger = {}; }
 
 (function(){
 
@@ -16,7 +16,7 @@ if (!window.Mongo) { window.Mongo = {}; }
   };
 
 
-  Mongo.Twits = ActiveElement.Collection.spawn('twit', {
+  Blahger.Twits = ActiveElement.Collection.spawn('twit', {
 
     timelineURL: 'http://twitter.com/statuses/public_timeline.json',
 
@@ -34,24 +34,26 @@ if (!window.Mongo) { window.Mongo = {}; }
     },
 
     loadStatuses: function(callbackName){
-      //Create a temporary function that can be reached as the
+      //Create a temporary global function that can be reached as the
       //callback for the Twitter response
-      var callbackName = (new Date()).valueOf();
-      var that = this;
+      var callbackName = 'twidget_'+(new Date()).valueOf();
       window[callbackName] = function(json){
-        that.setStatuses(json);
+        this.setStatuses(json);
         delete window[callbackName];
-        that.set('loading', false);
-      };
+        this.set('loading', false);
+      }.bind(this);
 
       this.set('loading', true);
-      this.loadJSON(this.timelineURL, 'window["'+callbackName+'"]');
+      this.loadJSON(this.timelineURL, callbackName);
     },
     
     refreshStatuses: function(json){
+      var odd = false;
       this.element.update();
       json.each(function(st){
-        this.element.insert({bottom:Mongo.Twit.buildFromJSON(st)});
+        var twit = Blahger.Twit.buildFromJSON(st);
+        twit.addClassName((odd = !odd) ? 'odd' : 'even');
+        this.element.insert({bottom:twit});
       }, this);
       this.items = this.findItems();
     },
@@ -91,14 +93,14 @@ if (!window.Mongo) { window.Mongo = {}; }
   });
 
 
-  Mongo.PublicTwits = Mongo.Twits.spawn('twit', {
+  Blahger.PublicTwits = Blahger.Twits.spawn('twit', {
     afterInitialize: function(){
       this.activate();
     }
   });
 
 
-  Mongo.PrivateTwits = Mongo.Twits.spawn('twit', {
+  Blahger.PrivateTwits = Blahger.Twits.spawn('twit', {
 
     timelineURL: 'http://twitter.com/statuses/friends_timeline.json',
 
@@ -110,16 +112,19 @@ if (!window.Mongo) { window.Mongo = {}; }
 
   });
 
-  Mongo.Twit = ActiveElement.Base.spawn('twit', {
+  Blahger.Twit = ActiveElement.Base.spawn('twit', {
 
     extend: {
       //Builds a "twit" element from the JSON returned by Twitter
       buildFromJSON: function(st){
         var time = new Date(st.created_at);
         return E('div', {'class':'twit',id:'twit_'+st.id},
-          E('h3', {'class':'field username'}, E('a', {href:'http://twitter.com/'+st.user.screen_name}, st.user.screen_name)),
+          E('img', {src:st.user.profile_image_url, 'class':'profile', width:'48', height:'48'}),
+          E('h3', {'class':'field username'},
+            E('a', {href:'http://twitter.com/'+st.user.screen_name}, st.user.screen_name)
+          ),
           E('p', {'class':'meta'},
-            'At ',
+            'at ',
             E('span', {'class':'field time'}, time.getHours()+':'+time.getMinutes()),
             ' from ',
             E('span', {'class':'field source'}, st.source)
@@ -133,50 +138,41 @@ if (!window.Mongo) { window.Mongo = {}; }
 
 
 
-  Mongo.UpdateForm = ActiveElement.Form.spawn('twitter_update', {
+  Blahger.UpdateForm = ActiveElement.Form.spawn('twitter_update', {
   
     extend: {
       findInDocument: function(){
         return new this($('new_twitter_update'));
       },
       attach: function(form){
-        Mongo.updateForm = form;
+        Blahger.updateForm = form;
       }
     },
 
     afterInitialize: function(){
       this.hijack();
+      var input = this.getElement('status')
+      input.observe('focus', function(){
+        if (!input.changed) {
+          input.changed = true;
+          input.value = '';
+        }
+      });
     },
 
     hijack: function(){
-      this.element.observe('submit', function(e){
-        e.stop();
-        this.sendUpdate();
-      }.bindAsEventListener(this));
+      if (!this._onSubmitHandler) {
+        this._onSubmitHandler = function(e){
+          e.stop();
+          this.sendUpdate();
+        }.bindAsEventListener(this);
+      }
+      this.element.observe('submit', this._onSubmitHandler);
     },
     
     //POST the update to Twitter in an iframe
     sendUpdate: function(){
-      var name = 'humbaba'+(new Date()).valueOf();//unique name for the iframe
-      var iframe = E('iframe', {style:'display:none', name:name});
-      this.element.insert({bottom:iframe});
-
-      var previousTarget = this.element.readAttribute('target');
-      this.element.writeAttribute('target', name);//Redirect the form to the iframe
-
-      //Watch the iframe until it's loaded (request complete)
-      var interval = setInterval(function(){
-        var loaded = false;
-        try { iframe.contentWindow.src } catch (e) { loaded = true; } //X-domain raises exception
-        if (loaded) {
-          clearTimeout(interval);
-          iframe.remove();
-          this.element.writeAttribute('target', previousTarget);
-          ActiveElement.messages.fire('status update sent');
-        }
-      }.bind(this), 100);
-
-      this.element.submit();
+      this.element.insert({bottom: E('script', {src:'http://twitter.com/statuses/update.json?_method=post&status=test'})});
     },
 
     getActionValue: function(){ return this.element.readAttribute('action'); },

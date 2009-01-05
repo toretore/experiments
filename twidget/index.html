@@ -8,71 +8,10 @@
     <script src="active_element.js" type="text/javascript"></script>
     <script src="tabs.js" type="text/javascript"></script>
     <script src="twits.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
 
-    <style type="text/css">
-      #tabs {
-      }
-
-        #tabs.active {
-        }
-
-        #tabs .tablist {
-          list-style-type: none;
-          overflow: hidden;
-          padding: 0;
-          margin: 0;
-        }
-
-          #tabs .tablist li {
-            float: left;
-            margin-right: 0.2em;
-          }
-
-            #tabs .tablist li a {
-              padding: 0.25em;
-              background: #ccc;
-              color: #333;
-              text-decoration: none;
-            }
-
-            #tabs .tablist li.active a {
-              background-color: #999;
-              color: #000;
-            }
-
-        #tabs .tab {
-          background: #eee;
-          display: none;
-        }
-
-          #tabs .tab.active {
-            display: block;
-          }
-
-            #tabs .tab.active > h2 {
-              display: none;
-            }
-
-      .twits {
-        padding: 0.5em;
-        max-height: 15em;
-        overflow: auto;
-      }
-
-        .twits.loading {
-          background: #f00 !important;
-        }
-
-        .twits .twit {
-        
-        }
-
-          .twits .twit h3 {
-            
-          }
-    </style>
   
     <div id="tabs">
       <div class="tab">
@@ -93,7 +32,7 @@
       </div>
     </div>
 
-    <form action="http://twitter.com/statuses/update.xml" method="post" id="new_twitter_update" class="new_twitter_update">
+    <form action="http://localhost:3000/" method="post" id="new_twitter_update" class="new_twitter_update">
       <p>
         <label for="twitter_update_status">Message</label>
         <textarea name="status" id="twitter_update_status">What are you doing?</textarea>

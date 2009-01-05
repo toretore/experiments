@@ -1,0 +1,145 @@
+  #tabs {
+    width: 30em;
+  }
+
+    #tabs.active {
+    }
+
+    #tabs .tablist {
+      list-style-type: none;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+    }
+
+      #tabs .tablist li {
+        float: left;
+        margin-right: 0.2em;
+      }
+
+        #tabs .tablist li a {
+          display: block;
+          padding: 0.25em 0.5em;
+          background: #888;
+          color: #ddd;
+          text-decoration: none;
+        }
+
+        #tabs .tablist li.active a {
+          background-color: #111;
+          color: #eee;
+        }
+
+    #tabs.active .tab {
+      background: #333;
+      color: #ccc;
+      display: none;
+    }
+
+      #tabs.active .tab.active {
+        display: block;
+      }
+
+        #tabs.active .tab.active h2.title {
+          display: none;
+        }
+
+  .twits {
+    height: 20em;
+    overflow: auto;
+    border: 1px solid #111;
+    border-top-width: 3px;
+  }
+
+    .twits.loading {
+      border-top-color: #ff6;
+      cursor: wait;
+    }
+
+    .twits .fallback {
+      text-align: center;
+    }
+
+    .twits.loading .fallback a:after {
+      content: " loading..";
+    }
+
+    .twits a {
+      color: #ccf !important;
+    }
+
+      .twits a:hover, .twits a:focus {
+        color: #66f !important;
+      }
+
+    .twits .twit {
+      overflow: auto;
+      min-height: 50px;
+      padding: 10px;
+      padding-left: 70px;
+      position: relative;
+      font-size: 80%;
+    }
+
+      .twits .twit.odd {
+         
+       }
+
+      .twits .twit.even {
+         background: #444;
+       }
+
+      .twits .twit img.profile {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+
+      .twits .twit .username, .twits .twit .meta {
+        float: left;
+        margin: 0 0.25em 0 0 !important;
+      }
+
+      .twits .twit .username {
+        font-size: 100% !important;
+      }
+
+      .twits .twit .message {
+        clear: left;
+        margin: 0 !important;
+        padding-top: 10px;
+      }
+
+  #new_twitter_update {
+    background: #111 !important;
+    color: #ccc !important;
+    width: 30em !important;
+  }
+
+    #new_twitter_update p {
+      margin: 0 !important;
+      padding: 10px !important;
+      overflow: auto !important;
+    }
+
+    #new_twitter_update label {
+      display: none !important;
+    }
+
+    #new_twitter_update input {
+      width: 70% !important;
+      float: left !important;
+      padding: 0.5em !important;
+      background: #ddd !important;
+      border: 1px solid #fff !important;
+      color: #333 !important;
+    }
+
+    #new_twitter_update input.button {
+      width: 20% !important;
+      float: right !important;
+      padding: 0.4em !important;
+      background: #444 !important;
+      border: 1px solid #666 !important;
+      color: #ccc !important;
+    }

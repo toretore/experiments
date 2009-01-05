@@ -1,14 +1,14 @@
-if (!window.Mongo) { window.Mongo = {}; }
+if (!window.Blahger) { window.Blahger = {}; }
 
-Mongo.Tab = ActiveElement.Base.spawn('tab', {
+Blahger.Tab = ActiveElement.Base.spawn('tab', {
 
   afterInitialize: function(){
     var twits = this.element.down('.twits');
     var type = twits.getLabel('type');
     if (type == 'public') {
-      this.twits = new Mongo.PublicTwits(twits);
+      this.twits = new Blahger.PublicTwits(twits);
     } else if (type == 'private') {
-      this.twits = new Mongo.PrivateTwits(twits);
+      this.twits = new Blahger.PrivateTwits(twits);
     }
   },
 
@@ -19,18 +19,23 @@ Mongo.Tab = ActiveElement.Base.spawn('tab', {
 
   isActive: function(){
     return this.element.hasClassName('active');
+  },
+
+  setTitleValue: function(v){
+    this.insertValueInElement(this.getElement('title'), v);
+    this.listItem && this.listItemLink.update(v);
   }
 
 });
 
-Mongo.Tabs = ActiveElement.Collection.spawn('tab', {
+Blahger.Tabs = ActiveElement.Collection.spawn('tab', {
 
   extend: {
     findInDocument: function(){
       return new this($('tabs'));
     },
     attach: function(tabs){
-      Mongo.tabs = tabs;
+      Blahger.tabs = tabs;
     }
   },
 
@@ -64,7 +69,7 @@ Mongo.Tabs = ActiveElement.Collection.spawn('tab', {
     this.each(function(tab){
       var li = new Element('li');
       tab.listItem = li;
-      var link = new Element('a', {href:'#'});
+      var link = tab.listItemLink = new Element('a', {href:'#'});
       link.update(tab.get('title'));
       li.update(link);
       li.observe('click', function(e){

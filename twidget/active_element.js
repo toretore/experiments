@@ -1,5 +1,4 @@
 
-
 ActiveElement = new JS.Class({
 
   extend: {
@@ -86,6 +85,7 @@ ActiveElement = new JS.Class({
 
   initialize: function(element){
     this.element = $(element);
+    this.states.initial && this.changeState(this.states.initial);
   },
   
   getName: function(){ return this.klass.getName(); },
@@ -246,6 +246,28 @@ ActiveElement = new JS.Class({
 
   remove: function(){
     this.element.remove();
+  },
+
+
+  /*****
+   * FSM
+   ************/
+
+  states: {},
+
+  changeState: function(state){
+    var next = this.states[state];
+    if (next) {
+      var current = this.states[this.state];
+      current && current.onExit && current.onExit.call(this, state);
+      next.onEnter && next.onEnter.call(this, this.state);
+      this.state = state;
+    }
+  },
+
+  action: function(name){
+    var state = this.states[this.state];
+    state && state[name] && state[name].call(this);
   }
 
 });
@@ -254,34 +276,38 @@ Element.addMethods(ActiveElement.ElementExtensions);
 
 
 //Very simple messaging system
-ActiveElement.messages = {
+ActiveElement.extend({
 
-  subscriptions: {},
+  messages: {
 
-  subscribe: function(message, callback, scope){
-    if (!this.subscriptions[message]) { this.subscriptions[message] = []; }
-    this.subscriptions[message].push({callback: callback, scope: scope});
-  },
-  
-  unsubscribe: function(message, callback){
-    var s = this.subscriptions;
-    if (s[message]) {
-      s[message].each(function(o, i){
-        if (o.callback == callback) { s[message].splice(i,1); }
-      });
+    subscriptions: {},
+
+    subscribe: function(message, callback, scope){
+      if (!this.subscriptions[message]) { this.subscriptions[message] = []; }
+      this.subscriptions[message].push({callback: callback, scope: scope});
+    },
+    
+    unsubscribe: function(message, callback){
+      var s = this.subscriptions;
+      if (s[message]) {
+        s[message].each(function(o, i){
+          if (o.callback == callback) { s[message].splice(i,1); }
+        });
+      }
+    },
+
+    fire: function(message){
+      if (this.subscriptions[message]) {
+        var args = $A(arguments).slice(1);
+        this.subscriptions[message].each(function(o){
+          o.callback.apply(o.scope || window, args)
+        });
+      }
     }
-  },
 
-  fire: function(message){
-    if (this.subscriptions[message]) {
-      var args = $A(arguments).slice(1);
-      this.subscriptions[message].each(function(o){
-        o.callback.apply(o.scope || window, args)
-      });
-    }
   }
 
-};
+});
 
 
 
@@ -540,6 +566,6 @@ ActiveElement.Form = new JS.Class(ActiveElement.Base, {
 
 
 //IE seems to have problems with document.observe('dom:loaded')
-document.observe('dom:loaded', function(){
+Event.observe(window, 'load', function(){
   ActiveElement.findAndAttachAllClasses();
 });
