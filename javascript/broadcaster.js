@@ -19,6 +19,11 @@
  * b.broadcast('new item', 'cat'); // ['cat']
  * b.broadcast('new item', 'dog'); // ['cat', 'dog']
  *
+ * The special message '*' is used as a global listener which will receive all messages:
+ *
+ * b.listen('*', function(message){ alert(message + ' was received'); })
+ * b.fire('foo'); //Alerts "foo was received"
+ *
  * A broadcaster can easily be used to make an object observable:
  *
  * function ElementObserver(element, interval){
@@ -71,13 +76,24 @@ Broadcaster = function(){
   p.unsubscribe = p.stopListening;
 
   //Broadcast a message. Any additional arguments are proxied to
-  //the listener's callback function.
+  //the listener's callback function. Listeners for the special
+  //message '*' will receive all messages that are fired
   p.broadcast = function(message){
-    var l = this.listeners, m = message, i;
-    if (l[m]) {
-      var args = Array.prototype.slice.call(arguments, 1);
-      for (i=0; i<l[m].length; i++) {
-        l[m][i].callback.apply(l[m][i].scope || this.defaultScope, args)
+    var l = this.listeners[message], g = this.listeners['*'], args, i;
+
+    if (l || g) {
+      args = Array.prototype.slice.call(arguments, 1);
+
+      if (l) {//Specific listeners
+        for (i=0; i<l.length; i++) {
+          l[i].callback.apply(l[i].scope || this.defaultScope, args)
+        }
+      }
+
+      if (g) {//Global listeners
+        for (i=0; i<g.length; i++) {//Globals also receive message name
+          g[i].callback.apply(g[i].scope || this.defaultScope, arguments)
+        }
       }
     }
   };
