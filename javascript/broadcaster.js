@@ -57,10 +57,11 @@ Broadcaster = function(){
   p.defaultScope = this;// window/global
 
   //Attach a listener for a particular message with a callback function and
-  //an optional scope in which it will run
+  //an optional scope in which it will run. Returns the callback function.
   p.listen = function(message, callback, scope){
     if (!this.listeners[message]) { this.listeners[message] = []; }
     this.listeners[message].push({callback: callback, scope: scope});
+    return callback;
   };
   p.subscribe = p.listen;
 
