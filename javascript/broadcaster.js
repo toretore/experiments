@@ -15,7 +15,7 @@
  * DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
  * TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
  *
- * 0. You just DO WHAT THE FUCK YOU WANT TO. 
+ * 0. You just DO WHAT THE FUCK YOU WANT TO.
  *
  *
  *
@@ -63,7 +63,7 @@
  *     alert('Value in '+o.element+' changed from '+ov+' to '+nv);
  *   });
  * });
- * 
+ *
  */
 
 Broadcaster = function(){
