@@ -1,11 +1,11 @@
 /* Base: Simple base class with getter/setter and event-ish functionality
  *
  * var o = new Base();
- * o.b.listen('foo changed', function(ov, nv){ log('Foo was changed from "'+ov+'" to "'+nv+'"'); });
+ * o.listen('foo changed', function(ov, nv){ log('Foo was changed from "'+ov+'" to "'+nv+'"'); });
  * o.set('foo', 'bar'); //Logs 'Foo was changed from "" to "bar"'
  * o.get('foo');
- * o.b.listen('touch', function(){ alert("Can't touch this"); });
- * o.b.fire('touch'); // Alerts */
+ * o.listen('touch', function(){ alert("Can't touch this"); });
+ * o.fire('touch'); // Alerts */
 Base = Class.create({
 
   initialize: function(){
@@ -63,8 +63,8 @@ Base = Class.create({
     var oldValue = this.get(name);
     this.setValueByFunction(name, value) || this.setValue(name, value);
     var newValue = this.get(name);
-    this.b.fire('value changed', name, newValue, oldValue);
-    this.b.fire(name+' value changed', newValue, oldValue);
+    this.fire('value changed', name, newValue, oldValue);
+    this.fire(name+' value changed', newValue, oldValue);
     return newValue;
   },
 
@@ -180,7 +180,7 @@ ElementBase = Class.create(Base, {
   //Remove the wrapped element from the DOM and fire a "removed" message.
   remove: function(){
     this.element.remove();
-    this.b.fire('removed');
+    this.fire('removed');
   }
 
 });
