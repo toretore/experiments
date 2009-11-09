@@ -93,3 +93,50 @@ Events can be bubbled to other Broadcaster or Base objects:
 
 Bubbled messages can optionally include a namespace which will be prepended to
 the message when bubbled.
+
+
+== ElementBase ==
+
+ElementBase extends Base with getter and setter functionality that looks inside
+a wrapped DOM element first to find and set attributes. If a suitable element
+is not found inside the wrapped element, getting and setting works like in a
+normal Base object.
+
+  <div class="post">
+    <h2 class="title">How to maximize return on your social graph</h2>
+    <p class="body">Optimize virality of your crowdsourcing marketing strategy with SEO techniques.</p>
+  </div>
+
+  var Post = Class.create(ElementBase, {});
+  var post = new Post($$('.post').first());
+  post.get('title'); //"How to maximize return on your social graph"
+  post.set('body', 'Be a douchebag.');
+
+Elements containing the value for a certain attribute are by default located
+by looking for the first element inside the wrapped element (the post div in
+the example above) having the attribute class name. You can change this by
+overriding the getElementFromSelector method:
+
+  //Require elements to also have the "value" class
+  Post.prototype.getElementBySelector = function(attribute){
+    return this.element.down('.value.'+attribute);
+  };
+
+If you only need to override this for a single attribute, you can define
+a custom element getter method for it:
+
+  //Return the anchor tag inside the .title element
+  Post.prototype.getTitleElement = function(){
+    return this.element.down('.title a');
+  };
+
+These elements are also used for setting values. Getting and setting values
+is implemented using innerHTML, but can be customised by overriding the
+extractValueFromElement and insertValueInElement methods:
+
+  Post.prototype.extractValueFromElement = function(element){
+    return element.innerHTML.replace(/<.*>/, '');
+  };
+  Post.prototype.insertValueInElement = function(element, value){
+    element.innerHTML = value.toUpperCase();
+  };
