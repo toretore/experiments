@@ -1,3 +1,73 @@
+/* Simple JavaScript Inheritance
+ * By John Resig http://ejohn.org/
+ * MIT Licensed.
+ */
+// Inspired by base2 and Prototype
+// Altered to return Class instead of attaching it to global object
+BaseClass = (function(){
+  var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+  // The base Class implementation (does nothing)
+  var Class = function(){};
+  
+  // Create a new Class that inherits from this class
+  Class.extend = function(prop) {
+    var _super = this.prototype;
+    
+    // Instantiate a base class (but only create the instance,
+    // don't run the init constructor)
+    initializing = true;
+    var prototype = new this();
+    initializing = false;
+    
+    // Copy the properties over onto the new prototype
+    for (var name in prop) {
+      // Check if we're overwriting an existing function
+      prototype[name] = typeof prop[name] == "function" && 
+        typeof _super[name] == "function" && fnTest.test(prop[name]) ?
+        (function(name, fn){
+          return function() {
+            var tmp = this._super;
+            
+            // Add a new ._super() method that is the same method
+            // but on the super-class
+            this._super = _super[name];
+            
+            // The method only need to be bound temporarily, so we
+            // remove it when we're done executing
+            var ret = fn.apply(this, arguments);        
+            this._super = tmp;
+            
+            return ret;
+          };
+        })(name, prop[name]) :
+        prop[name];
+    }
+    
+    // The dummy class constructor
+    function Class() {
+      // All construction is actually done in the init method
+      if ( !initializing && this.init )
+        this.init.apply(this, arguments);
+    }
+    
+    // Populate our constructed prototype object
+    Class.prototype = prototype;
+    
+    // Enforce the constructor to be what we expect
+    Class.constructor = Class;
+
+    // And make this class extendable
+    Class.extend = arguments.callee;
+    
+    return Class;
+  };
+
+  return Class;
+})();
+
+
+
+
 /* Base: Simple base class with getter/setter and event-ish functionality
  *
  * var o = new Base();
@@ -6,15 +76,15 @@
  * o.get('foo');
  * o.listen('touch', function(){ alert("Can't touch this"); });
  * o.fire('touch'); // Alerts */
-Base = Class.create({
+Base = BaseClass.extend({
 
-  initialize: function(){
+  init: function(){
     this.b = this.broadcaster = new Broadcaster();
     this.b.defaultScope = this;
     this.values = {}; //for getValue/setValue
     this.afterInitialize && this.afterInitialize();
   },
-  
+
   listen: function(){
     return this.b.listen.apply(this.b, arguments);
   },
@@ -103,35 +173,33 @@ Base = Class.create({
 });
 
 
-
-Object.extend(Base, {
-
-  camelize: function(str){
-    str = str.dasherize().camelize();
-    return str.slice(0,1).toUpperCase() + str.slice(1);
-  }
-
-});
+Base.camelize = function(str){
+  str = str.replace(/[-_]+(.?)/g, function(s,c){
+    return c ? c.toUpperCase() : '';
+  });
+  return str.slice(0,1).toUpperCase() + str.slice(1);
+};
 
 
 
 /* ElementBase: A simple DOM element wrapper which inherits Base and extends
  * its attribute getter/setter functionality to be able to fetch values
  * from inside the element based on class names. */
-ElementBase = Class.create(Base, {
 
-  initialize: function($super, element){
+ElementBase = Base.extend({
+
+  init: function(element){
     this.element = element;
-    $super();
+    this._super();
   },
 
   //Override getValue to use getValueByElement if possible
-  getValue: function($super, name){
-    return this.getValueByElement(name) || $super(name);
+  getValue: function(name){
+    return this.getValueByElement(name) || this._super(name);
   },
   //Override to use setValueByElement if possible
-  setValue: function($super, name, value){
-    this.setValueByElement(name, value) || $super(name, value);
+  setValue: function(name, value){
+    this.setValueByElement(name, value) || this._super(name, value);
   },
 
   //Get a value from inside the wrapped element. Returns undefined if no container
@@ -163,7 +231,7 @@ ElementBase = Class.create(Base, {
   //matches the selector "."+name. E.g. ".foo_bar_baz". Returns undefined
   //if no element is found.
   getElementFromSelector: function(name){
-    return this.element.down('.'+name);
+    return ElementBase.getElementFromSelector(this.element, '.'+name);
   },
 
   //Extracts the value from a container element. Default implementation
@@ -175,12 +243,10 @@ ElementBase = Class.create(Base, {
   //use innerHTML.
   insertValueInElement: function(el, value){
     el.innerHTML = value;
-  },
-
-  //Remove the wrapped element from the DOM and fire a "removed" message.
-  remove: function(){
-    this.element.remove();
-    this.fire('removed');
   }
 
 });
+
+ElementBase.getElementFromSelector = function(parentElement, selector){
+  return parentElement.down(selector);
+};

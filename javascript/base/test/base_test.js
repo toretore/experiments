@@ -5,7 +5,7 @@ TestCase("BaseTest", {
   },
   
   'test should run afterInitialize': function(){
-    var klass = Class.create(Base, {
+    var klass = Base.extend({
       afterInitialize: function(){
         this.initialized = true;
       }
@@ -105,6 +105,13 @@ TestCase("BaseTest", {
     this.o.fire('foo', 'bar');
     assertEquals(undefined, normal);
     assertEquals('bar', namespaced);
+  },
+
+  'test camelize should remove dashes and underscores and uppercase next letter + first': function(){
+    assertEquals('FooBar', Base.camelize('foo_bar'));
+    assertEquals('FooBar', Base.camelize('foo-bar'));
+    assertEquals('FooBarBaz', Base.camelize('foo_bar-baz'));
+    assertEquals('FooBarBazQuux', Base.camelize('_foo_barBaz-quux-'));
   }
 
 });
@@ -119,7 +126,8 @@ TestCase("ElementBaseTest", {
 
   'test should have access to wrapped element': function(){
     assertNotNull(this.post.element);
-    assertEquals($$('.post').first(), this.post.element);
+    //assertEquals($$('.post').first(), this.post.element);
+    assert($$('.post').first() == this.post.element);
   },
 
   'test should get value from element if possible': function(){
